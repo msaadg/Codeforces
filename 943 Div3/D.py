@@ -3,8 +3,21 @@ for __ in range(int(input())):
     p = [0] + list(map(int, input().split()))
     a = [0] + list(map(int, input().split()))
 
-    s = set()
-    b = []
-    while pb not in s:
-        s.add(pb)
-        b.append(a[pb])
+    b, bcurr = 0, 0
+    s, scurr  = 0, 0
+    for i in range(min(n, k)):
+        b = max(b, bcurr + (k - i) * a[pb])
+        s = max(s, scurr + (k - i) * a[ps])
+
+        bcurr += a[pb]
+        scurr += a[ps]
+
+        pb = p[pb]
+        ps = p[ps]
+
+    if b > s:
+        print("Bodya")
+    elif s > b:
+        print("Sasha")
+    else:
+        print("Draw")
