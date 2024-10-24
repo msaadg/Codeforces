@@ -1,0 +1,57 @@
+def ways(s):
+    dp = [0]*(len(s)+1)
+    dp[0] = 1
+    dp[1] = 1
+    for i in range(1, len(s)):
+        if s[i] != "0":
+            dp[i+1] += dp[i]
+        if s[i-1] != "0" and int(s[i-1] + s[i]) <= 26:
+            dp[i+1] += dp[i-1]
+        dp[i+1] = dp[i+1] % 998244353
+    return dp[-1]
+
+
+for t in range(1, int(input())+1):
+    e, k = input().split()
+    e = list(e)
+    k = int(k) - 1
+
+    pairable = False
+    idx = len(e)
+    while idx > 0:
+        idx -= 1
+        if e[idx] == "?":
+            if not pairable:
+                if idx == 0 or (e[idx-1] != "2" and e[idx-1] != "?"):
+                    opts = 9
+                    e[idx] = str(9 - (k % opts))
+
+                elif e[idx-1] == "2":
+                    opts = 6
+                    e[idx] = str(6 - (k % opts))
+                
+                elif e[idx-1] == "?":
+                    opts = 15
+                    if k % opts < 6:
+                        e[idx-1] = "2"
+                        e[idx] = str(6 - (k%opts))
+                    else:
+                        e[idx-1] = "1"
+                        e[idx] = str(15 - (k % opts))
+                
+                k = k//opts
+
+            else:
+                if int(e[idx+1]) <= 6:
+                    opts = 2
+                    e[idx] = str(2 - (k % opts))
+                else:
+                    opts = 1 
+                    e[idx] = "1"
+                k = k//opts
+        pairable = True
+        if idx < len(e) - 1 and e[idx+1] == "0":
+            pairable = False 
+        
+    
+    print(f"Case #{t}:","".join(e), ways(e))
